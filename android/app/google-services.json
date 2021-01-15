@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "1014150376449",
+    "project_id": "hbook-3bc06",
+    "storage_bucket": "hbook-3bc06.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1014150376449:android:0e2b46128c951dad2c2400",
+        "android_client_info": {
+          "package_name": "com.hisabbook"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1014150376449-bsptf8t49m3nbpb9bh9v9ovqca5a3gek.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.hisabbook",
+            "certificate_hash": "06114e941f42662be4790ded03a5d4f0bbadcaed"
+          }
+        },
+        {
+          "client_id": "1014150376449-h5o6crsklbqp8ojpbhseipu1j5ii5agg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCD1rMg6O0NI_iOn0mLjXSNy3EJXAZg_s8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1014150376449-h5o6crsklbqp8ojpbhseipu1j5ii5agg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

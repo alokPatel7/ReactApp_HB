@@ -12,6 +12,7 @@ import {
 import Dialog from 'react-native-dialog';
 import {SignUp} from '../../services/AuthServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 // const Swidth = Dimensions.get('screen').width * 0.1;
 // const Sheight = Dimensions.get('screen').height * 0.1;
@@ -63,77 +64,81 @@ class HbVerify extends Component {
     // const {email} = this.props.route.params;
     return (
       <>
-        <View
-          style={{
-            ...style.container,
-          }}>
-          <Image
-            style={style.logoImage}
-            source={require('../../../public/images/logo.jpg')}></Image>
-          <View style={style.welcomeMsg}>
-            <Text style={{fontSize: 25}}>Set Password</Text>
-          </View>
-          <Text style={style.hintText}>Your email id: {this.state.email}</Text>
-          <TouchableOpacity activeOpacity={0.7}>
-            <Text
-              style={{
-                fontSize: 19,
-                color: 'blue',
-                paddingBottom: 15,
-                textAlign: 'center',
-              }}
-              onPress={() => {
-                this.props.navigation.navigate('signup');
-              }}>
-              Edit email
+        <KeyboardAwareScrollView>
+          <View
+            style={{
+              ...style.container,
+            }}>
+            <Image
+              style={style.logoImage}
+              source={require('../../../public/images/logo.jpg')}></Image>
+            <View style={style.welcomeMsg}>
+              <Text style={{fontSize: 25}}>Set Password</Text>
+            </View>
+            <Text style={style.hintText}>
+              Your email id: {this.state.email}
             </Text>
-          </TouchableOpacity>
-          <View style={style.inputContainer}>
-            <TextInput
-              style={style.ContactNumber}
-              keyboardType="default"
-              secureTextEntry={true}
-              placeholder="Password"
-              placeholderTextColor="#000"
-              onChangeText={(val) => {
-                this.setState({password: val});
-              }}
-            />
-            <TextInput
-              style={style.ContactNumber}
-              keyboardType="default"
-              secureTextEntry={true}
-              placeholderTextColor="#000"
-              placeholder="Confirm Password"
-              onChangeText={(val) => {
-                this.setState({confirmPassword: val});
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            activeOpacity={0.6}
-            onPress={() => {
-              this.handleSubmit();
-            }}
-            style={style.actionButton}>
-            <Text style={{fontSize: 25, color: '#fff'}}>Submit</Text>
-          </TouchableOpacity>
-          <View style={{alignItems: 'center', marginVertical: 30}}></View>
-          <View style={style.dialogBox}>
-            <Dialog.Container visible={this.state.isShowDialog}>
-              <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
-              <Dialog.Description style={{fontSize: 18}}>
-                {this.state.errorMsg}
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
+            <TouchableOpacity activeOpacity={0.7}>
+              <Text
+                style={{
+                  fontSize: 19,
+                  color: 'blue',
+                  paddingBottom: 15,
+                  textAlign: 'center',
+                }}
                 onPress={() => {
-                  this.handleHide();
+                  this.props.navigation.navigate('signup');
+                }}>
+                Edit email
+              </Text>
+            </TouchableOpacity>
+            <View style={style.inputContainer}>
+              <TextInput
+                style={style.ContactNumber}
+                keyboardType="default"
+                secureTextEntry={true}
+                placeholder="Password"
+                placeholderTextColor="#000"
+                onChangeText={(val) => {
+                  this.setState({password: val});
                 }}
               />
-            </Dialog.Container>
+              <TextInput
+                style={style.ContactNumber}
+                keyboardType="default"
+                secureTextEntry={true}
+                placeholderTextColor="#000"
+                placeholder="Confirm Password"
+                onChangeText={(val) => {
+                  this.setState({confirmPassword: val});
+                }}
+              />
+            </View>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => {
+                this.handleSubmit();
+              }}
+              style={style.actionButton}>
+              <Text style={{fontSize: 25, color: '#fff'}}>Submit</Text>
+            </TouchableOpacity>
+            <View style={{alignItems: 'center', marginVertical: 30}}></View>
+            <View style={style.dialogBox}>
+              <Dialog.Container visible={this.state.isShowDialog}>
+                <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
+                <Dialog.Description style={{fontSize: 18}}>
+                  {this.state.errorMsg}
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() => {
+                    this.handleHide();
+                  }}
+                />
+              </Dialog.Container>
+            </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </>
     );
   }
@@ -149,45 +154,36 @@ const style = StyleSheet.create({
   logoImage: {
     marginTop: 50,
     width: '50%',
-    height: 180,
+    height: 140,
     alignSelf: 'center',
   },
   welcomeMsg: {
     paddingTop: 30,
     alignSelf: 'center',
-    //     paddingHorizontal: 20,
   },
   hintText: {
-    //     marginLeft: 20,
     color: '#6f7580',
     alignSelf: 'center',
     fontSize: 18,
   },
   inputContainer: {
-    // flexDirection: 'row',
     paddingHorizontal: 20,
-    // alignItems: 'center',?
-    // justifyContent: 'space-evenly',
   },
   ContactNumber: {
-    // flex: 0.9,
-    // paddingHorizontal: 10,
     marginBottom: 10,
     fontSize: 20,
     borderWidth: 1,
     borderRadius: 5,
     borderColor: '#000',
     color: '#000',
-    //     alignItems: 'center',
     textAlign: 'center',
-    // letterSpacing: 20,
     height: 50,
   },
   actionButton: {
     backgroundColor: '#57a157',
     height: 50,
-    margin: 16,
-    marginTop: 20,
+    marginHorizontal: 16,
+    marginVertical: 4,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',

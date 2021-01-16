@@ -12,6 +12,7 @@ import {
   TouchableHighlight,
 } from 'react-native';
 import HbForm from '../../components/Hb-Form';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const PersonalExpenses = (props) => {
   const navigation = useNavigation();
@@ -34,11 +35,12 @@ const PersonalExpenses = (props) => {
     <>
       <View style={style.container}>
         <FlatList
+          showsVerticalScrollIndicator={false}
           data={mockData}
           keyExtractor={(item) => item.id}
           renderItem={({item}) => (
-            <View style={{borderRadius: 10, backgroundColor: '#fff'}}>
-              <TouchableOpacity style={style.flatlist}>
+            <View style={{backgroundColor: '#fff'}}>
+              <View style={style.flatlist}>
                 <View style={style.listrow}>
                   <Text
                     style={{
@@ -57,17 +59,53 @@ const PersonalExpenses = (props) => {
                     <Text style={[style.pricelabel, {color: '#000'}]}>Rs.</Text>
                   </View>
                 </View>
-                <Text style={{flex: 1, fontSize: 18}}>
-                  kjhskdkgk shdkfjsjdjkdjkhdhsakjd hdfjhjajhsad kaskjdsajd
-                  ahsdloweqnlANS AHLIHjadkjsakjdhjekjwhk jhalshalshdsal
-                  dsahdahldhaldhasl kdlnalsdlsalkdhal
-                </Text>
-              </TouchableOpacity>
+                <View style={style.listrow}>
+                  <Text
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                    style={{
+                      flex: 1,
+                      width: 240,
+                      fontSize: 20,
+                      color: '#000',
+                      fontSize: 18,
+                    }}>
+                    kjhskdkgk shdkfjsjdjkd jkhdhsakjd hdfjhjajhsad kaskjdsajd
+                    ahsdloweqnlANS AHLIHjadkjsakjdhjekjwhk jhalshalshdsal
+                    dsahdahldhaldhasl kdlnalsdlsalkdhal
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: 10,
+                    }}>
+                    <TouchableOpacity
+                      activeOpacity={0.6}
+                      style={{...style.pricelabel}}>
+                      <MaterialCommunityIcons
+                        style={{...style.editbutton, color: 'green'}}
+                        name="pencil"
+                        // color={color}
+                        size={26}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      activeOpacity={0.6}
+                      style={style.pricelabel}>
+                      <MaterialCommunityIcons
+                        style={{...style.editbutton, color: 'red'}}
+                        name="delete"
+                        // color={color}
+                        size={26}
+                      />
+                    </TouchableOpacity>
+                  </View>
+                </View>
+              </View>
               <View
                 style={{
                   height: 15,
                   backgroundColor: '#e6e6ff',
-                  flex: 1,
                 }}
               />
             </View>
@@ -170,5 +208,9 @@ const style = StyleSheet.create({
   },
   openButton: {
     padding: 20,
+  },
+  editbutton: {
+    paddingVertical: 5,
+    fontSize: 25,
   },
 });

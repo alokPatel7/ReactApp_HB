@@ -34,7 +34,7 @@ class HbDashboard extends Component {
             options={{
               tabBarLabel: 'Expenses',
               tabBarIcon: ({color}) => (
-                <MaterialCommunityIcons name="book" color={color} size={26} />
+                <MaterialCommunityIcons name="home" color={color} size={26} />
               ),
             }}
           />

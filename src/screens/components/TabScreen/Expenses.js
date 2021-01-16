@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Text,
   FlatList,
@@ -9,11 +9,23 @@ import {
   Image,
   ScrollView,
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Dialog from 'react-native-dialog';
 
 const Expenses = ({navigation}) => {
-  SampleFunction = () => {
+  const [isShowDialog, setIsShowDialog] = useState(false);
+
+  const SampleFunction = () => {
     Alert.alert('Floating Button Clicked');
+  };
+
+  const handleDeleteCancel = () => {
+    setIsShowDialog(false);
+  };
+
+  const handleDeleteConfirm = () => {
+    setIsShowDialog(true);
   };
   const mockData = [
     {id: '1', text: 'Expo 💙'},
@@ -54,8 +66,8 @@ const Expenses = ({navigation}) => {
         data={mockData}
         keyExtractor={(item) => item.id}
         renderItem={({item}) => (
-          <View style={{borderRadius: 20, backgroundColor: '#fff'}}>
-            <TouchableOpacity style={style.flatlist}>
+          <View style={{backgroundColor: '#fff'}}>
+            <View style={style.flatlist}>
               <View style={style.listrow}>
                 <Text
                   style={{
@@ -74,12 +86,55 @@ const Expenses = ({navigation}) => {
                   <Text style={[style.pricelabel, {color: '#000'}]}>Rs.</Text>
                 </View>
               </View>
-              <Text style={{flex: 1, fontSize: 18}}>
-                kjhskdkgk shdkfjsjdjkdjkhdhsakjd hdfjhjajhsad kaskjdsajd
-                ahsdloweqnlANS AHLIHjadkjsakjdhjekjwhk jhalshalshdsal
-                dsahdahldhaldhasl kdlnalsdlsalkdhal
-              </Text>
-            </TouchableOpacity>
+              <View style={style.listrow}>
+                <Text
+                  numberOfLines={2}
+                  ellipsizeMode="tail"
+                  style={{
+                    flex: 1,
+                    width: 240,
+                    fontSize: 20,
+                    color: '#000',
+                    fontSize: 18,
+                  }}>
+                  kjhskdkgk shdkfjsjdjkd jkhdhsakjd hdfjhjajhsad kaskjdsajd
+                  ahsdloweqnlANS AHLIHjadkjsakjdhjekjwhk jhalshalshdsal
+                  dsahdahldhaldhasl kdlnalsdlsalkdhal
+                </Text>
+                <View
+                  style={{
+                    flexDirection: 'row',
+                    marginTop: 10,
+                  }}>
+                  <TouchableOpacity
+                    onPress={() => {
+                      navigation.navigate('additem', {
+                        params: {itemid: item.id},
+                      });
+                    }}
+                    activeOpacity={0.6}
+                    style={{...style.pricelabel}}>
+                    <MaterialCommunityIcons
+                      style={{...style.editbutton, color: 'green'}}
+                      name="square-edit-outline"
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                  <TouchableOpacity
+                    onPress={() => {
+                      handleDeleteConfirm();
+                    }}
+                    activeOpacity={0.6}
+                    style={style.pricelabel}>
+                    <MaterialCommunityIcons
+                      style={{...style.editbutton, color: 'red'}}
+                      name="delete"
+                      size={30}
+                    />
+                  </TouchableOpacity>
+                </View>
+              </View>
+            </View>
             <View
               style={{
                 height: 15,
@@ -89,6 +144,26 @@ const Expenses = ({navigation}) => {
           </View>
         )}
       />
+      <View>
+        <Dialog.Container visible={isShowDialog}>
+          <Dialog.Title style={{color: 'red'}}>Delete</Dialog.Title>
+          <Dialog.Description style={{fontSize: 18}}>
+            Are you sure want to Delete this item.
+          </Dialog.Description>
+          <Dialog.Button
+            label="Cancel"
+            onPress={() => {
+              handleDeleteCancel();
+            }}
+          />
+          <Dialog.Button
+            label="Confirm"
+            onPress={() => {
+              handleDeleteConfirm();
+            }}
+          />
+        </Dialog.Container>
+      </View>
     </View>
     // </ScrollView>
   );
@@ -120,5 +195,9 @@ const style = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: 'red',
+  },
+  editbutton: {
+    paddingVertical: 5,
+    fontSize: 25,
   },
 });

@@ -72,11 +72,11 @@ class HbSignup extends Component {
             <TouchableOpacity
               activeOpacity={0.6}
               onPress={() => {
-                this.props.navigation.navigate('signup');
+                this.props.navigation.navigate('login');
               }}
               style={style.actionButton}>
               <Text style={{fontSize: 18, color: '#fff'}}>
-                New user? Signup
+                Already Have Account? Login
               </Text>
             </TouchableOpacity>
             <View style={{alignItems: 'center'}}>

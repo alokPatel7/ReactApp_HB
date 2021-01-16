@@ -35,7 +35,9 @@ class HbSplashScreen extends Component {
             style={style.logoImage}
             source={require('../../../public/images/logo.jpg')}
           />
-          <View>{/* <Text style={style.logo}>HisabBook</Text> */}</View>
+          <View>
+            <Text style={style.logo}>HisabBook</Text>
+          </View>
           <ActivityIndicator size="large" color="#fff" />
         </ImageBackground>
       </>

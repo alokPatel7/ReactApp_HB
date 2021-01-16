@@ -23,7 +23,9 @@ class HbForm extends Component {
       price: '',
       itemdesc: '',
       selectItem: '',
+      ItemId: this.props?.route?.params,
     };
+    console.warn(this.state.ItemId?.params?.itemid);
   }
 
   handleOnChangeText = (value) => {
@@ -139,7 +141,11 @@ class HbForm extends Component {
               )}
             </View>
             <View style={style.actionButton}>
-              <TouchableOpacity style={style.TouchOpacity}>
+              <TouchableOpacity
+                onPress={() => {
+                  this.props.navigation.pop();
+                }}
+                style={style.TouchOpacity}>
                 <Text
                   style={{
                     fontSize: 20,

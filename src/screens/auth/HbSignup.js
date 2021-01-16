@@ -12,6 +12,7 @@ import {
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import auth from '@react-native-firebase/auth';
 import Dialog from 'react-native-dialog';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 class HbSignup extends Component {
   constructor(props) {
@@ -38,58 +39,72 @@ class HbSignup extends Component {
   render() {
     return (
       <>
-        <View style={style.container}>
-          <Image
-            style={style.logoImage}
-            source={require('../../../public/images/logo.jpg')}></Image>
-          <View style={style.welcomeMsg}>
-            <Text style={{fontSize: 25}}>Welcome to HisabBook...</Text>
-          </View>
-          <Text style={style.hintText}>Enter your email id to get started</Text>
-          <View style={style.inputContainer}>
-            <TextInput
-              style={style.ContactNumber}
-              keyboardType="email-address"
-              placeholder="Enter email address"
-              placeholderTextColor="#000"
-              onChangeText={(val) => {
-                this.setState({email: val});
-              }}
-            />
-          </View>
-          <TouchableOpacity
-            onPress={() => {
-              this.handleSubmit();
-            }}
-            activeOpacity={0.6}
-            style={style.actionButton}>
-            <Text style={{fontSize: 25, color: '#fff'}}>Next</Text>
-          </TouchableOpacity>
-          <View style={{alignItems: 'center'}}>
-            <Text style={{fontSize: 18, color: '#6f7580'}}>
-              By clicking Next, you agree to our
+        <KeyboardAwareScrollView>
+          <View style={style.container}>
+            <Image
+              style={style.logoImage}
+              source={require('../../../public/images/logo.jpg')}></Image>
+            <View style={style.welcomeMsg}>
+              <Text style={{fontSize: 25}}>Welcome to HisabBook...</Text>
+            </View>
+            <Text style={style.hintText}>
+              Enter your email id to get started
             </Text>
-            <Text style={{fontSize: 18, color: '#000'}}>
-              Terms & Conditions
-              <Text style={{fontSize: 18, color: '#6f7580'}}> and </Text>
-              <Text> Privacy Policy</Text>
-            </Text>
-          </View>
-          <View style={style.dialogBox}>
-            <Dialog.Container visible={this.state.isShowDialog}>
-              <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
-              <Dialog.Description style={{fontSize: 18}}>
-                Invalid Email Id
-              </Dialog.Description>
-              <Dialog.Button
-                label="Ok"
-                onPress={() => {
-                  this.handleHide();
+            <View style={style.inputContainer}>
+              <TextInput
+                style={style.ContactNumber}
+                keyboardType="email-address"
+                placeholder="Enter email address"
+                placeholderTextColor="#000"
+                onChangeText={(val) => {
+                  this.setState({email: val});
                 }}
               />
-            </Dialog.Container>
+            </View>
+            <TouchableOpacity
+              onPress={() => {
+                this.handleSubmit();
+              }}
+              activeOpacity={0.6}
+              style={style.actionButton}>
+              <Text style={{fontSize: 25, color: '#fff'}}>Next</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              activeOpacity={0.6}
+              onPress={() => {
+                this.props.navigation.navigate('signup');
+              }}
+              style={style.actionButton}>
+              <Text style={{fontSize: 18, color: '#fff'}}>
+                New user? Signup
+              </Text>
+            </TouchableOpacity>
+            <View style={{alignItems: 'center'}}>
+              <Text style={{fontSize: 18, color: '#6f7580'}}>
+                By clicking Next, you agree to our
+              </Text>
+              <Text style={{fontSize: 18, color: '#000'}}>
+                Terms & Conditions
+                <Text style={{fontSize: 18, color: '#6f7580'}}> and </Text>
+                <Text> Privacy Policy</Text>
+              </Text>
+            </View>
+            <View style={style.dialogBox}>
+              <Dialog.Container visible={this.state.isShowDialog}>
+                <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
+                <Dialog.Description style={{fontSize: 18}}>
+                  Invalid Email Id
+                </Dialog.Description>
+                <Dialog.Button
+                  label="Ok"
+                  onPress={() => {
+                    this.handleHide();
+                  }}
+                />
+              </Dialog.Container>
+            </View>
           </View>
-        </View>
+        </KeyboardAwareScrollView>
       </>
     );
   }
@@ -100,21 +115,18 @@ export default HbSignup;
 const style = StyleSheet.create({
   container: {
     flex: 1,
-    //     alignItems: 'center',
   },
   logoImage: {
     marginTop: 50,
     width: '50%',
-    height: 180,
+    height: 140,
     alignSelf: 'center',
   },
   welcomeMsg: {
     paddingTop: 30,
     alignSelf: 'center',
-    //     paddingHorizontal: 20,
   },
   hintText: {
-    //     marginLeft: 20,
     color: '#6f7580',
     alignSelf: 'center',
     paddingBottom: 30,
@@ -122,7 +134,6 @@ const style = StyleSheet.create({
   },
   inputContainer: {
     flexDirection: 'row',
-    //     paddingHorizontal: 20,
     alignItems: 'center',
     justifyContent: 'center',
   },
@@ -144,12 +155,13 @@ const style = StyleSheet.create({
     borderColor: '#000',
     color: '#000',
     textAlign: 'center',
+    marginBottom: 10,
   },
   actionButton: {
     backgroundColor: '#57a157',
     height: 50,
-    margin: 16,
-    marginTop: 20,
+    marginHorizontal: 16,
+    marginVertical: 4,
     borderRadius: 5,
     alignItems: 'center',
     justifyContent: 'center',

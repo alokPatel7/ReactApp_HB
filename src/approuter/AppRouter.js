@@ -8,6 +8,7 @@ import HbVerify from '../screens/auth/HbVerify';
 import HbLogin from '../screens/auth/Hblogin';
 import HbDashboard from '../screens/components/HbDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
+import HbForm from '../screens/components/Hb-Form';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -15,7 +16,9 @@ const Drawer = createDrawerNavigator();
 class AppRouter extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      isLoggedUser: false,
+    };
   }
   render() {
     return (
@@ -45,7 +48,12 @@ class AppRouter extends Component {
             <Drawer.Screen
               name="dashboard"
               component={HbDashboard}
-              options={{headerShown: true}}
+              options={{headerShown: false}}
+            />
+            <Stack.Screen
+              name="additem"
+              component={HbForm}
+              options={{headerShown: true, title: 'Add Item'}}
             />
           </Stack.Navigator>
         </NavigationContainer>

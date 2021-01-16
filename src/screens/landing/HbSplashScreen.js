@@ -19,9 +19,9 @@ class HbSplashScreen extends Component {
     setTimeout(async () => {
       let usertoken = await AsyncStorage.getItem('usertoken');
       if (usertoken == null) {
-        this.props.navigation.navigate('login');
+        this.props.navigation.replace('login');
       } else {
-        this.props.navigation.navigate('dashboard');
+        this.props.navigation.replace('dashboard');
       }
     }, 3000);
   }
@@ -35,9 +35,7 @@ class HbSplashScreen extends Component {
             style={style.logoImage}
             source={require('../../../public/images/logo.jpg')}
           />
-          <View>
-            <Text style={style.logo}>HisabBook</Text>
-          </View>
+          <View>{/* <Text style={style.logo}>HisabBook</Text> */}</View>
           <ActivityIndicator size="large" color="#fff" />
         </ImageBackground>
       </>

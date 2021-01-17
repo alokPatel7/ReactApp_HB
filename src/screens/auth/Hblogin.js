@@ -12,6 +12,7 @@ import Dialog from 'react-native-dialog';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {AuthErrorMessage, LoginUser} from '../../services/AuthServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 const Swidth = Dimensions.get('screen').width * 1;
 const Sheight = Dimensions.get('screen').height * 0.0;
@@ -38,19 +39,32 @@ class HbLogin extends Component {
         this.setState({errorMsg: 'Invalid Email '});
         this.setState({isShowDialog: true});
       } else {
-        console.log(this.state.email, this.state.password);
         try {
           LoginUser(this.state.email, this.state.password)
             .then(async (res) => {
-              console.log('this is Signup res', res.user.uid);
+              console.log('this is Login res', res.user.uid);
               await AsyncStorage.setItem('usertoken', res.user.uid);
               await AsyncStorage.getItem('usertoken');
               this.props.navigation.navigate('dashboard', {uid: res.user.uid});
             })
             .catch((err) => {
               let errMessage = err.code.split('/')[1].split('-').join(' ');
-              this.setState({errorMsg: errMessage});
-              this.setState({isShowDialog: true});
+              if (errMessage == 'unknown') {
+                this.setState({errorMsg: 'No internet connection'});
+                this.setState({isShowDialog: true});
+              } else {
+                this.setState({errorMsg: errMessage});
+                this.setState({isShowDialog: true});
+              }
+            });
+          await firestore()
+            .collection('Users')
+            .add({
+              name: 'Ada Lovelace',
+              age: 30,
+            })
+            .then((res) => {
+              console.log('this is storage', res);
             });
         } catch (err) {
           console.log('this is err', err);

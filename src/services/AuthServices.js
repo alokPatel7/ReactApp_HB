@@ -1,6 +1,7 @@
 import React, {Component, createContext, useState} from 'react';
-import auth from '@react-native-firebase/auth';
+import auth, {firebase} from '@react-native-firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import firestore from '@react-native-firebase/firestore';
 
 export const SignUp = async (email, password) => {
   return await auth().createUserWithEmailAndPassword(email, password);
@@ -12,6 +13,13 @@ export const LoginUser = async (email, password) => {
 
 export const userSignOut = async () => {
   return await auth().signOut();
+};
+
+export const AddItem = async () => {
+  return await firestore().collection('Users').add({
+    name: 'Ada Lovelace',
+    age: 30,
+  });
 };
 
 export const AuthErrorMessage = (errCode) => {

@@ -12,29 +12,29 @@ import {
 // import DatePicker from 'react-native-datepicker';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
+import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 
 class HbForm extends Component {
   constructor(props) {
     super(props);
     this.state = {
       date: new Date(),
-      mode: '',
+      mode: 'date',
       show: false,
       price: '',
       itemdesc: '',
       selectItem: '',
       ItemId: this.props?.route?.params,
     };
-    console.warn(this.state.ItemId?.params?.itemid);
+    // console.warn(this.state.ItemId?.params?.itemid);
   }
 
   handleOnChangeText = (value) => {
-    //     console.log('this is type', /^\d+$/.test(price));
-    //     if (!/^\d+$/.test(price)) {
-    //       alert('Invalid Ammount entered');
-    //     }
-    //     getDate();
-    //     console.log('this is price', price, itemdesc, selectItem, date);
+    // console.log('this is type', /^\d+$/.test(this.state.price));
+    if (!/^\d+$/.test(this.state.price)) {
+      console.log('Invalid Ammount entered');
+    }
+    // console.log('this is price', this.state);
   };
   onChange = (event, selectedDate) => {
     //     const currentDate = selectedDate || date;
@@ -48,11 +48,22 @@ class HbForm extends Component {
   };
 
   showDatepicker = () => {
-    //     showMode('date');
+    // showMode('date');
   };
+  showTimepicker = () => {
+    this.setState({show: true});
+  };
+  onSubmit = () => {
+    console.log(
+      'this is onSubmit',
+      this.state.date,
+      this.state.date.toISOString().slice(0, 10),
+    );
+  };
+
   render() {
     return (
-      <>
+      <KeyboardAwareScrollView>
         <View style={style.conatiner}>
           <View style={style.content}>
             <Text style={{textAlign: 'center', marginBottom: 16, fontSize: 25}}>
@@ -60,10 +71,9 @@ class HbForm extends Component {
             </Text>
             <View style={style.row}>
               <Picker
-                // mode="dropdown"
                 selectedValue={this.state.selectItem}
                 onValueChange={(value) => {
-                  //   setSelectItem(value);
+                  this.setState({selectItem: value});
                 }}
                 style={{
                   ...style.inputfield,
@@ -82,9 +92,10 @@ class HbForm extends Component {
                 underlineColorAndroid="transparent"
                 placeholder="Item Price"
                 placeholderTextColor="#007FFF"
-                keyboardType="numeric"
+                keyboardType={'numeric'}
                 onChangeText={(value) => {
-                  //   setPrice(value);
+                  this.setState({price: value});
+                  this.handleOnChangeText();
                 }}
                 style={style.inputfield}
               />
@@ -95,48 +106,55 @@ class HbForm extends Component {
                 placeholderTextColor="#007FFF"
                 keyboardType="default"
                 onChangeText={(value) => {
-                  //   setItemDesc(value);
+                  this.setState({itemdesc: value});
                 }}
                 style={style.inputfield}
               />
-              {/* <DatePicker
-              style={{width: 'auto', marginTop: 10}}
-              date={date}
-              mode="date"
-              placeholder="select date"
-              format="DD-MM-YYYY"
-              confirmBtnText="Confirm"
-              cancelBtnText="Cancel"
-              customStyles={{
-                dateIcon: {
-                  position: 'absolute',
-                  left: 0,
-                  top: 4,
-                  marginLeft: 0,
-                },
-              }}
-              onDateChange={(date) => {
-                setLastDate(date);
-              }}
-            /> */}
+
               <View>
-                <Button
-                  onPress={() => this.showDatepicker()}
-                  title="Show date picker!"
-                />
-              </View>
-              <View>
-                {/* <Button onPress={showTimepicker} title="Show time picker!" /> */}
-                {/* <Text>{date.toDateString()}</Text> */}
+                {/* <Button
+                  onPress={() => this.showTimepicker()}
+                  title="Show Date picker!"
+                /> */}
+                <Text style={{fontSize: 20, color: 'red'}}>
+                  {this.state.date.toDateString() == 'Invalid Date'
+                    ? new Date().toUTCString().slice(0, 16)
+                    : this.state.date.toDateString()}
+                  &nbsp;&nbsp;&nbsp;
+                  {/* {new Date(this.state.date).toUTCString().slice(0, 16)} */}
+                </Text>
+                <Text
+                  style={{
+                    fontSize: 17,
+                    color: '#000',
+                    textDecorationLine: 'underline',
+                    textDecorationStyle: 'solid',
+                    fontStyle: 'italic',
+                  }}
+                  onPress={() => this.showTimepicker()}>
+                  Change date
+                </Text>
               </View>
               {this.state.show && (
                 <DateTimePicker
                   testID="dateTimePicker"
                   value={this.state.date}
-                  mode={mode}
+                  mode={this.state.mode}
                   is24Hour={true}
-                  display="default"
-                  onChange={onChange}
+                  display="calendar"
+                  onChange={(val) => {
+                    console.log('date', val);
+                    if (val.nativeEvent.timestamp != undefined) {
+                      this.setState({
+                        date: new Date(val.nativeEvent.timestamp),
+                      });
+                    } else {
+                      this.setState({
+                        date: new Date(),
+                      });
+                    }
+                    this.setState({show: false});
+                  }}
                 />
               )}
             </View>
@@ -155,11 +173,9 @@ class HbForm extends Component {
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
+                onPress={() => this.onSubmit()}
                 style={{...style.TouchOpacity, backgroundColor: '#1fde7b'}}>
                 <Text
-                  onPress={() => {
-                    this.handleOnChangeText();
-                  }}
                   style={{
                     fontSize: 20,
                     textAlign: 'center',
@@ -170,7 +186,7 @@ class HbForm extends Component {
             </View>
           </View>
         </View>
-      </>
+      </KeyboardAwareScrollView>
     );
   }
 }
@@ -210,13 +226,13 @@ const style = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 20,
-    paddingHorizontal: 10,
+    paddingHorizontal: 18,
   },
   TouchOpacity: {
     padding: 10,
     backgroundColor: '#fff',
-    // flex: ,
-    width: 140,
+    flex: 0.7,
+    // width: 'auto',
     borderRadius: 10,
   },
 });

@@ -8,6 +8,7 @@ import {
   StyleSheet,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {AddItem} from '../../services/AuthServices';
 
 class HbSplashScreen extends Component {
   constructor(props) {
@@ -15,7 +16,11 @@ class HbSplashScreen extends Component {
     this.state = {};
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    // await AddItem().then(() => {
+    //   console.log('User added!');
+    // });
+
     setTimeout(async () => {
       let usertoken = await AsyncStorage.getItem('usertoken');
       if (usertoken == null) {

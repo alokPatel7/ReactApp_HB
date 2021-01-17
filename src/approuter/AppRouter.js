@@ -9,6 +9,7 @@ import HbLogin from '../screens/auth/Hblogin';
 import HbDashboard from '../screens/components/HbDashboard';
 import {createDrawerNavigator} from '@react-navigation/drawer';
 import HbForm from '../screens/components/Hb-Form';
+import firestore from '@react-native-firebase/firestore';
 
 const Stack = createStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -19,6 +20,9 @@ class AppRouter extends Component {
     this.state = {
       isLoggedUser: false,
     };
+  }
+  componentDidMount() {
+    const usersCollection = firestore().collection('Users');
   }
   render() {
     return (

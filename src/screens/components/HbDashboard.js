@@ -4,6 +4,7 @@ import {createDrawerNavigator, DrawerContent} from '@react-navigation/drawer';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {setConnectionWithFirebase} from '../../services/firebaseCRUD';
 
 import Expenses from './TabScreen/Expenses';
 import PersonalExpenses from './TabScreen/PersonalExpenses';
@@ -21,6 +22,16 @@ class HbDashboard extends Component {
   constructor(props) {
     super(props);
     this.state = {};
+  }
+
+  componentDidMount() {
+    // await setConnectionWithFirebase()
+    //   .then((res) => {
+    //     console.log('setConnectionWithFirebase', res);
+    //   })
+    //   .catch((err) => {
+    //     console.log('setConnectionWithFirebase', err);
+    //   });
   }
   render() {
     return (

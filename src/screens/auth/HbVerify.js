@@ -13,6 +13,7 @@ import Dialog from 'react-native-dialog';
 import {SignUp} from '../../services/AuthServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import Hbloader from '../components/loader';
 
 // const Swidth = Dimensions.get('screen').width * 0.1;
 // const Sheight = Dimensions.get('screen').height * 0.1;
@@ -25,6 +26,7 @@ class HbVerify extends Component {
       confirmPassword: '',
       isShowDialog: false,
       errorMsg: '',
+      loader: false,
     };
     // const {width, height} = Dimensions.get('screen');
   }
@@ -37,17 +39,21 @@ class HbVerify extends Component {
         this.setState({errorMsg: 'Password are not Match'});
         this.setState({isShowDialog: true});
       } else {
+        this.setState({loader: true});
         try {
           SignUp(this.state.email, this.state.password)
             .then((res) => {
+              this.setState({loader: false});
               this.props.navigation.navigate('login');
             })
             .catch((err) => {
+              this.setState({loader: false});
               let errMessage = err.code.split('/')[1].split('-').join(' ');
               this.setState({errorMsg: errMessage});
               this.setState({isShowDialog: true});
             });
         } catch (err) {
+          this.setState({loader: false});
           console.log('this is err', err);
         }
       }
@@ -61,84 +67,87 @@ class HbVerify extends Component {
   };
 
   render() {
-    // const {email} = this.props.route.params;
     return (
       <>
-        <KeyboardAwareScrollView>
-          <View
-            style={{
-              ...style.container,
-            }}>
-            <Image
-              style={style.logoImage}
-              source={require('../../../public/images/logo.jpg')}></Image>
-            <View style={style.welcomeMsg}>
-              <Text style={{fontSize: 25}}>Set Password</Text>
-            </View>
-            <Text style={style.hintText}>
-              Your email id: {this.state.email}
-            </Text>
-            <TouchableOpacity activeOpacity={0.7}>
-              <Text
-                style={{
-                  fontSize: 19,
-                  color: 'blue',
-                  paddingBottom: 15,
-                  textAlign: 'center',
-                }}
-                onPress={() => {
-                  this.props.navigation.navigate('signup');
-                }}>
-                Edit email
+        {this.state.loader ? (
+          <Hbloader />
+        ) : (
+          <KeyboardAwareScrollView>
+            <View
+              style={{
+                ...style.container,
+              }}>
+              <Image
+                style={style.logoImage}
+                source={require('../../../public/images/logo.jpg')}></Image>
+              <View style={style.welcomeMsg}>
+                <Text style={{fontSize: 25}}>Set Password</Text>
+              </View>
+              <Text style={style.hintText}>
+                Your email id: {this.state.email}
               </Text>
-            </TouchableOpacity>
-            <View style={style.inputContainer}>
-              <TextInput
-                style={style.ContactNumber}
-                keyboardType="default"
-                secureTextEntry={true}
-                placeholder="Password"
-                placeholderTextColor="#000"
-                onChangeText={(val) => {
-                  this.setState({password: val});
-                }}
-              />
-              <TextInput
-                style={style.ContactNumber}
-                keyboardType="default"
-                secureTextEntry={true}
-                placeholderTextColor="#000"
-                placeholder="Confirm Password"
-                onChangeText={(val) => {
-                  this.setState({confirmPassword: val});
-                }}
-              />
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => {
-                this.handleSubmit();
-              }}
-              style={style.actionButton}>
-              <Text style={{fontSize: 25, color: '#fff'}}>Submit</Text>
-            </TouchableOpacity>
-            <View style={{alignItems: 'center', marginVertical: 30}}></View>
-            <View style={style.dialogBox}>
-              <Dialog.Container visible={this.state.isShowDialog}>
-                <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
-                <Dialog.Description style={{fontSize: 18}}>
-                  {this.state.errorMsg}
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
+              <TouchableOpacity activeOpacity={0.7}>
+                <Text
+                  style={{
+                    fontSize: 19,
+                    color: 'blue',
+                    paddingBottom: 15,
+                    textAlign: 'center',
+                  }}
                   onPress={() => {
-                    this.handleHide();
+                    this.props.navigation.navigate('signup');
+                  }}>
+                  Edit email
+                </Text>
+              </TouchableOpacity>
+              <View style={style.inputContainer}>
+                <TextInput
+                  style={style.ContactNumber}
+                  keyboardType="default"
+                  secureTextEntry={true}
+                  placeholder="Password"
+                  placeholderTextColor="#000"
+                  onChangeText={(val) => {
+                    this.setState({password: val});
                   }}
                 />
-              </Dialog.Container>
+                <TextInput
+                  style={style.ContactNumber}
+                  keyboardType="default"
+                  secureTextEntry={true}
+                  placeholderTextColor="#000"
+                  placeholder="Confirm Password"
+                  onChangeText={(val) => {
+                    this.setState({confirmPassword: val});
+                  }}
+                />
+              </View>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  this.handleSubmit();
+                }}
+                style={style.actionButton}>
+                <Text style={{fontSize: 25, color: '#fff'}}>Submit</Text>
+              </TouchableOpacity>
+              <View style={{alignItems: 'center', marginVertical: 30}}></View>
+              <View style={style.dialogBox}>
+                <Dialog.Container visible={this.state.isShowDialog}>
+                  <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
+                  <Dialog.Description style={{fontSize: 18}}>
+                    {this.state.errorMsg}
+                  </Dialog.Description>
+                  <Dialog.Button
+                    label="Ok"
+                    onPress={() => {
+                      this.handleHide();
+                    }}
+                  />
+                </Dialog.Container>
+              </View>
             </View>
-          </View>
-        </KeyboardAwareScrollView>
+          </KeyboardAwareScrollView>
+        )}
       </>
     );
   }

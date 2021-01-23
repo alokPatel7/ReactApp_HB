@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {AddItem} from '../../services/AuthServices';
+import database from '@react-native-firebase/database';
 
 class HbSplashScreen extends Component {
   constructor(props) {
@@ -20,6 +21,13 @@ class HbSplashScreen extends Component {
     // await AddItem().then(() => {
     //   console.log('User added!');
     // });
+    await database()
+      .ref('/users/123')
+      .set({
+        name: 'Ada Lovelace',
+        age: 31,
+      })
+      .then(() => console.log('Data set.'));
 
     setTimeout(async () => {
       let usertoken = await AsyncStorage.getItem('usertoken');

@@ -13,6 +13,7 @@ import {
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
+import {AddItem} from '../../services/firebaseCRUD';
 
 class HbForm extends Component {
   constructor(props) {
@@ -53,12 +54,15 @@ class HbForm extends Component {
   showTimepicker = () => {
     this.setState({show: true});
   };
-  onSubmit = () => {
-    console.log(
-      'this is onSubmit',
-      this.state.date,
-      this.state.date.toISOString().slice(0, 10),
-    );
+  onSubmit = async () => {
+    console.log('called');
+    await AddItem(this.state)
+      .then((res) => {
+        console.log('this is add res', res);
+      })
+      .catch((err) => {
+        console.log(err);
+      });
   };
 
   render() {
@@ -92,7 +96,7 @@ class HbForm extends Component {
                 underlineColorAndroid="transparent"
                 placeholder="Item Price"
                 placeholderTextColor="#007FFF"
-                keyboardType={'numeric'}
+                keyboardType="number-pad"
                 onChangeText={(value) => {
                   this.setState({price: value});
                   this.handleOnChangeText();

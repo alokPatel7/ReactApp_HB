@@ -12,9 +12,11 @@ import {
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Dialog from 'react-native-dialog';
+import Hbloader from '../loader';
 
 const Expenses = ({navigation}) => {
   const [isShowDialog, setIsShowDialog] = useState(false);
+  const [loader, setLoader] = useState(true);
 
   const SampleFunction = () => {
     Alert.alert('Floating Button Clicked');
@@ -58,111 +60,114 @@ const Expenses = ({navigation}) => {
     {id: '25', text: 'Y'},
     {id: '26', text: 'Z'},
   ];
+
   return (
     // <ScrollView>
     <View style={style.container}>
-      <FlatList
-        showsVerticalScrollIndicator={false}
-        data={mockData}
-        keyExtractor={(item) => item.id}
-        renderItem={({item}) => (
-          <View style={{backgroundColor: '#fff'}}>
-            <View style={style.flatlist}>
-              <View style={style.listrow}>
-                <Text
-                  style={{
-                    flex: 1,
-                    fontSize: 20,
-                    color: 'green',
-                    fontWeight: 'bold',
-                  }}>
-                  {item.text}
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                  }}>
-                  <Text style={style.pricelabel}>2222222</Text>
-                  <Text style={[style.pricelabel, {color: '#000'}]}>Rs.</Text>
+      <View>
+        <FlatList
+          showsVerticalScrollIndicator={false}
+          data={mockData}
+          keyExtractor={(item) => item.id}
+          renderItem={({item}) => (
+            <View style={{backgroundColor: '#fff'}}>
+              <View style={style.flatlist}>
+                <View style={style.listrow}>
+                  <Text
+                    style={{
+                      flex: 1,
+                      fontSize: 20,
+                      color: 'green',
+                      fontWeight: 'bold',
+                    }}>
+                    {item.text}
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                    }}>
+                    <Text style={style.pricelabel}>2222222</Text>
+                    <Text style={[style.pricelabel, {color: '#000'}]}>Rs.</Text>
+                  </View>
+                </View>
+                <View style={style.listrow}>
+                  <Text
+                    numberOfLines={2}
+                    ellipsizeMode="tail"
+                    style={{
+                      flex: 1,
+                      color: '#000',
+                      fontSize: 16,
+                      letterSpacing: 1,
+                      lineHeight: 25,
+                    }}>
+                    kjhskdkgk shdkfjsjdjkd jkhdhsakjd hdfjhjajhsad kaskjdsajd
+                    ahsdloweqnlANS AHLIHjadkjsakjdhjekjwhk jhalshalshdsal
+                    dsahdahldhaldhasl kdlnalsdlsalkdhal
+                  </Text>
+                  <View
+                    style={{
+                      flexDirection: 'row',
+                      marginTop: 10,
+                    }}>
+                    <TouchableOpacity
+                      onPress={() => {
+                        navigation.navigate('additem', {
+                          params: {itemid: item.id},
+                        });
+                      }}
+                      activeOpacity={0.6}
+                      style={{...style.pricelabel}}>
+                      <MaterialCommunityIcons
+                        style={{...style.editbutton, color: 'green'}}
+                        name="square-edit-outline"
+                        size={30}
+                      />
+                    </TouchableOpacity>
+                    <TouchableOpacity
+                      onPress={() => {
+                        handleDeleteConfirm();
+                      }}
+                      activeOpacity={0.6}
+                      style={style.pricelabel}>
+                      <MaterialCommunityIcons
+                        style={{...style.editbutton, color: 'red'}}
+                        name="delete"
+                        size={30}
+                      />
+                    </TouchableOpacity>
+                  </View>
                 </View>
               </View>
-              <View style={style.listrow}>
-                <Text
-                  numberOfLines={2}
-                  ellipsizeMode="tail"
-                  style={{
-                    flex: 1,
-                    width: 240,
-                    fontSize: 20,
-                    color: '#000',
-                    fontSize: 18,
-                  }}>
-                  kjhskdkgk shdkfjsjdjkd jkhdhsakjd hdfjhjajhsad kaskjdsajd
-                  ahsdloweqnlANS AHLIHjadkjsakjdhjekjwhk jhalshalshdsal
-                  dsahdahldhaldhasl kdlnalsdlsalkdhal
-                </Text>
-                <View
-                  style={{
-                    flexDirection: 'row',
-                    marginTop: 10,
-                  }}>
-                  <TouchableOpacity
-                    onPress={() => {
-                      navigation.navigate('additem', {
-                        params: {itemid: item.id},
-                      });
-                    }}
-                    activeOpacity={0.6}
-                    style={{...style.pricelabel}}>
-                    <MaterialCommunityIcons
-                      style={{...style.editbutton, color: 'green'}}
-                      name="square-edit-outline"
-                      size={30}
-                    />
-                  </TouchableOpacity>
-                  <TouchableOpacity
-                    onPress={() => {
-                      handleDeleteConfirm();
-                    }}
-                    activeOpacity={0.6}
-                    style={style.pricelabel}>
-                    <MaterialCommunityIcons
-                      style={{...style.editbutton, color: 'red'}}
-                      name="delete"
-                      size={30}
-                    />
-                  </TouchableOpacity>
-                </View>
-              </View>
+              <View
+                style={{
+                  height: 15,
+                  backgroundColor: '#e6e6ff',
+                }}
+              />
             </View>
-            <View
-              style={{
-                height: 15,
-                backgroundColor: '#e6e6ff',
+          )}
+        />
+        <View>
+          <Dialog.Container visible={isShowDialog}>
+            <Dialog.Title style={{color: 'red'}}>Delete</Dialog.Title>
+            <Dialog.Description style={{fontSize: 18}}>
+              Are you sure want to Delete this item.
+            </Dialog.Description>
+            <Dialog.Button
+              label="Cancel"
+              onPress={() => {
+                handleDeleteCancel();
               }}
             />
-          </View>
-        )}
-      />
-      <View>
-        <Dialog.Container visible={isShowDialog}>
-          <Dialog.Title style={{color: 'red'}}>Delete</Dialog.Title>
-          <Dialog.Description style={{fontSize: 18}}>
-            Are you sure want to Delete this item.
-          </Dialog.Description>
-          <Dialog.Button
-            label="Cancel"
-            onPress={() => {
-              handleDeleteCancel();
-            }}
-          />
-          <Dialog.Button
-            label="Confirm"
-            onPress={() => {
-              handleDeleteConfirm();
-            }}
-          />
-        </Dialog.Container>
+            <Dialog.Button
+              label="Confirm"
+              onPress={() => {
+                handleDeleteConfirm();
+              }}
+            />
+          </Dialog.Container>
+        </View>
       </View>
     </View>
     // </ScrollView>
@@ -177,7 +182,6 @@ const style = StyleSheet.create({
     marginLeft: 10,
     marginRight: 10,
     marginTop: 10,
-    // backgroundColor: 'red',
   },
   listrow: {
     flexDirection: 'row',

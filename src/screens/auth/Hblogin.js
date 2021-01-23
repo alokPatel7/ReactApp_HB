@@ -12,7 +12,7 @@ import Dialog from 'react-native-dialog';
 import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {AuthErrorMessage, LoginUser} from '../../services/AuthServices';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import firestore from '@react-native-firebase/firestore';
+import Hbloader from '../components/loader';
 
 const Swidth = Dimensions.get('screen').width * 1;
 const Sheight = Dimensions.get('screen').height * 0.0;
@@ -28,8 +28,8 @@ class HbLogin extends Component {
       errorMsg: '',
       Swidth: Dimensions.get('screen').width,
       Sheight: Dimensions.get('screen').height,
+      loader: false,
     };
-    // const {width, height} = Dimensions.get('screen');
   }
   handleSubmit = async () => {
     let regx = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
@@ -39,15 +39,18 @@ class HbLogin extends Component {
         this.setState({errorMsg: 'Invalid Email '});
         this.setState({isShowDialog: true});
       } else {
+        this.setState({loader: true});
         try {
           LoginUser(this.state.email, this.state.password)
             .then(async (res) => {
+              this.setState({loader: false});
               console.log('this is Login res', res.user.uid);
               await AsyncStorage.setItem('usertoken', res.user.uid);
               await AsyncStorage.getItem('usertoken');
               this.props.navigation.navigate('dashboard', {uid: res.user.uid});
             })
             .catch((err) => {
+              this.setState({loader: false});
               let errMessage = err.code.split('/')[1].split('-').join(' ');
               if (errMessage == 'unknown') {
                 this.setState({errorMsg: 'No internet connection'});
@@ -57,15 +60,15 @@ class HbLogin extends Component {
                 this.setState({isShowDialog: true});
               }
             });
-          await firestore()
-            .collection('Users')
-            .add({
-              name: 'Ada Lovelace',
-              age: 30,
-            })
-            .then((res) => {
-              console.log('this is storage', res);
-            });
+          // await firestore()
+          //   .collection('Users')
+          //   .add({
+          //     name: 'Ada Lovelace',
+          //     age: 30,
+          //   })
+          //   .then((res) => {
+          //     console.log('this is storage', res);
+          //   });
         } catch (err) {
           console.log('this is err', err);
         }
@@ -82,73 +85,77 @@ class HbLogin extends Component {
   render() {
     return (
       <>
-        <KeyboardAwareScrollView>
-          <View style={style.container}>
-            <Image
-              style={style.logoImage}
-              source={require('../../../public/images/logo.jpg')}></Image>
-            <View style={style.welcomeMsg}>
-              <Text style={{fontSize: 25, marginBottom: 20}}>
-                Welcome to HisabBook....
-              </Text>
-            </View>
-            <View style={style.inputContainer}>
-              <TextInput
-                style={style.ContactNumber}
-                keyboardType="default"
-                placeholder="Email"
-                placeholderTextColor="#000"
-                onChangeText={(val) => {
-                  this.setState({email: val});
-                }}
-              />
-              <TextInput
-                style={style.ContactNumber}
-                secureTextEntry={true}
-                keyboardType="default"
-                textContentType="password"
-                placeholderTextColor="#000"
-                placeholder="Password"
-                onChangeText={(val) => {
-                  this.setState({password: val});
-                }}
-              />
-            </View>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => {
-                this.handleSubmit();
-              }}
-              style={style.actionButton}>
-              <Text style={{fontSize: 25, color: '#fff'}}>Login</Text>
-            </TouchableOpacity>
-            <TouchableOpacity
-              activeOpacity={0.6}
-              onPress={() => {
-                this.props.navigation.navigate('signup');
-              }}
-              style={style.actionButton}>
-              <Text style={{fontSize: 18, color: '#fff'}}>
-                New user? Signup
-              </Text>
-            </TouchableOpacity>
-            {/* <View style={{alignItems: 'center', marginVertical: 30}}></View> */}
-            <View style={style.dialogBox}>
-              <Dialog.Container visible={this.state.isShowDialog}>
-                <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
-                <Dialog.Description style={{fontSize: 18}}>
-                  {this.state.errorMsg}
-                </Dialog.Description>
-                <Dialog.Button
-                  label="Ok"
-                  onPress={() => {
-                    this.handleHide();
+        {this.state.loader ? (
+          <Hbloader />
+        ) : (
+          <KeyboardAwareScrollView>
+            <View style={style.container}>
+              <Image
+                style={style.logoImage}
+                source={require('../../../public/images/logo.jpg')}></Image>
+              <View style={style.welcomeMsg}>
+                <Text style={{fontSize: 25, marginBottom: 20}}>
+                  Welcome to HisabBook....
+                </Text>
+              </View>
+              <View style={style.inputContainer}>
+                <TextInput
+                  style={style.ContactNumber}
+                  keyboardType="default"
+                  placeholder="Email"
+                  placeholderTextColor="#000"
+                  onChangeText={(val) => {
+                    this.setState({email: val});
                   }}
                 />
-              </Dialog.Container>
+                <TextInput
+                  style={style.ContactNumber}
+                  secureTextEntry={true}
+                  keyboardType="default"
+                  textContentType="password"
+                  placeholderTextColor="#000"
+                  placeholder="Password"
+                  onChangeText={(val) => {
+                    this.setState({password: val});
+                  }}
+                />
+              </View>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  this.handleSubmit();
+                }}
+                style={style.actionButton}>
+                <Text style={{fontSize: 25, color: '#fff'}}>Login</Text>
+              </TouchableOpacity>
+              <TouchableOpacity
+                activeOpacity={0.6}
+                onPress={() => {
+                  this.props.navigation.navigate('signup');
+                }}
+                style={style.actionButton}>
+                <Text style={{fontSize: 18, color: '#fff'}}>
+                  New user? Signup
+                </Text>
+              </TouchableOpacity>
+              {/* <View style={{alignItems: 'center', marginVertical: 30}}></View> */}
+              <View style={style.dialogBox}>
+                <Dialog.Container visible={this.state.isShowDialog}>
+                  <Dialog.Title style={{color: 'red'}}>Error</Dialog.Title>
+                  <Dialog.Description style={{fontSize: 18}}>
+                    {this.state.errorMsg}
+                  </Dialog.Description>
+                  <Dialog.Button
+                    label="Ok"
+                    onPress={() => {
+                      this.handleHide();
+                    }}
+                  />
+                </Dialog.Container>
+              </View>
             </View>
-          </View>
-        </KeyboardAwareScrollView>
+          </KeyboardAwareScrollView>
+        )}
       </>
     );
   }
